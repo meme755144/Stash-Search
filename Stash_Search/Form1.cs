@@ -77,7 +77,8 @@ namespace Stash_Search
         private void BackGroundWorker_ProgressChanged<T>(string FilePath)
         {
             listBox1.Items.Add(LogDetect.ReadLastLine(FilePath, 3, Encoding.UTF8));
-            Console.WriteLine(LogDetect.ReadLastLine(FilePath, 3, Encoding.UTF8));
+            Console.WriteLine(LogDetect.ReadLastLine(FilePath, 1, Encoding.UTF8));
+            var asd = LogDetect.ggg(LogDetect.ReadLastLine(FilePath, 1, Encoding.UTF8));
         }
         #endregion
 

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Stash_Search.API
@@ -107,5 +108,13 @@ namespace Stash_Search.API
             }
         }
 
+        public string ggg(string LogStr)
+        {
+            Regex regex = new Regex(@"\[(INFO|DEBUG) Client [a-zA-Z0-9]*\]");
+
+            var asdd = regex.Split(LogStr);
+            return ""; 
+        }
     }
+
 }
