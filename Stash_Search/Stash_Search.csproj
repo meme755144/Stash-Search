@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\IniMangerAPI.cs" />
+    <Compile Include="API\LogDetect.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

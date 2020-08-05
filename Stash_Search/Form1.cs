@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,43 +20,70 @@ namespace Stash_Search
             InitializeComponent();
         }
 
+        API.LogDetect LogDetect = new API.LogDetect();
+
         private void Form1_Load(object sender, EventArgs e)
         {
-            //GridSetting gridSettingForm = new GridSetting();
-            //gridSettingForm.Show();
+
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            //1.選擇加密類型
-            string myHashName = "SHA1";
-            //2.選擇加密檔案
-            String myFile = @"E:\Path of Exile\logs\Client.txt";
+            string LogFilePath = @"E:\Path of Exile\logs\Client.txt";
+            string CurrentHash = LogDetect.GetFileHash("SHA1", LogFilePath);
 
-            //若檔案不存在則離開
-            if (!File.Exists(myFile))
+            BackGroundWorkerInit(CurrentHash, LogFilePath);
+        }
+
+
+        #region BackGroundWorker 設定
+        private BackgroundWorker worker;
+        //初始化
+        private void BackGroundWorkerInit(string InitHash ,string FilePath)
+        {
+            worker = new BackgroundWorker();
+            worker.WorkerReportsProgress = true;
+            worker.WorkerSupportsCancellation = true;
+            worker.DoWork += (o, ea) =>
             {
-                return;
-            }
-            //3.建立HashAlgorithm類別
-            using (HashAlgorithm ha = HashAlgorithm.Create(myHashName))
+                BackGroundWorker_DoWork<bool>(InitHash, FilePath); // 可以使用泛型
+            };
+            worker.ProgressChanged += (o, ea) =>
             {
-                //4.開啟檔案
-                using (Stream myStream = new FileStream(myFile, FileMode.Open,FileAccess.Read,FileShare.ReadWrite))
+                BackGroundWorker_ProgressChanged<string>(FilePath);
+            };
+
+            worker.RunWorkerAsync();
+        }
+
+        //背景執行
+        private void BackGroundWorker_DoWork<T>(string OriginHash,string FilePath)
+        {
+            while (true)
+            {
+                string CurrnetHash = LogDetect.GetFileHash("SHA1", FilePath);
+
+                if (CurrnetHash != OriginHash)
                 {
-                    //5.產生加密的Code
-                    byte[] myHash = ha.ComputeHash(myStream);
-                    //6.顯示雜湊值
-                    //依檔案建立空字串
-                    StringBuilder NewHashCode = new StringBuilder(myHash.Length);
-                    //轉換成加密的Code
-                    foreach (byte AddByte in myHash)
-                    {
-                        NewHashCode.AppendFormat("{0:X2}", AddByte);
-                    }
-                    label1.Text = NewHashCode.ToString();
+                    worker.ReportProgress(1);
+                    OriginHash = CurrnetHash;
                 }
+
+                Thread.Sleep(1000);
             }
         }
+
+        //處理進度條更新
+        private void BackGroundWorker_ProgressChanged<T>(string FilePath)
+        {
+            listBox1.Items.Add(LogDetect.ReadLastLine(FilePath, 3, Encoding.UTF8));
+            Console.WriteLine(LogDetect.ReadLastLine(FilePath, 3, Encoding.UTF8));
+        }
+        #endregion
+
+
+
+
+
     }
 }
