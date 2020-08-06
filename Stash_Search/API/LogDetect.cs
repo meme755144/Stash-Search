@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Stash_Search.API
 {
@@ -108,13 +109,164 @@ namespace Stash_Search.API
             }
         }
 
-        public string ggg(string LogStr)
+        public string LogFormat(string LogStr)
         {
-            Regex regex = new Regex(@"\[(INFO|DEBUG) Client [a-zA-Z0-9]*\]");
+            try
+            {
+                Regex InfoRegex = new Regex(@"\[INFO Client [a-zA-Z0-9]*\]");
 
-            var asdd = regex.Split(LogStr);
-            return ""; 
+                string[] StringList = InfoRegex.Split(LogStr);
+                if (StringList.Length == 2)
+                {
+                    string TimeStamp = StringList[0];
+                    string Info = StringList[1].Trim();
+                    string[] MessageList = Info.Split(new char[] { ':' }, 2);
+                    string BuyerName = MessageList[0].Split(' ').Last();
+
+                    string SellerFrom = MessageList[0].Replace(BuyerName, "").Trim();
+                    string Language = "";
+                    switch (SellerFrom)
+                    {
+                        case "@來自":
+                        case "@From":
+                            Language = "English";
+                            break;
+                        case "@Von":
+                            Language = "Français|Deutsch";
+                            break;
+                        case "@De":
+                            Language = "Português Brasileiro|Español";
+                            break;
+                        case "@От кого":
+                            Language = "Русский";
+                            break;
+                        case "@จาก":
+                            Language = "ไทย";
+                            break;
+                        case "@수신":
+                            Language = "한국어";
+                            break;
+                        default:
+                            Language = "Unknown";
+                            return "";
+                    }
+
+                    Regex MsgRegex = new Regex(@"\(.+[0-9]\)|\(.+\)");
+
+                    MatchCollection sdd = MsgRegex.Matches(MessageList[1]);
+                    string StashInfo = "";
+                    foreach (var item in sdd)
+                    {
+                        if (Language == "한국어")
+                        {
+                            if (new string[] { "보관함 탭", "위치", "왼쪽", "상단" }.All(x => item.ToString().Contains(x)))
+                            {
+                                StashInfo = item.ToString();
+                            }
+                        }
+                        else
+                        {
+                            StashInfo = item.ToString();
+                        }
+                    }
+
+                    string StashName = "";
+                    string Position_Left = "";
+                    string Position_Top = "";
+
+                    string[] StashDataList = StashInfo.Split(new char[] { ',', ';', ':' });
+
+                    switch (Language)
+                    {
+
+                        case "English":
+                            StashName = StringRemoveHeadAndEnd(StashDataList[0].Replace("stash tab ", "").Trim()).Trim();
+                            Position_Left = StashDataList[2].Replace("left", "").Trim();
+                            Position_Top = StashDataList[3].Replace("top", "").Trim().Replace(")", "");
+                            break;
+                        case "Français|Deutsch":
+                            if (StashDataList[0].Contains("onglet de réserve"))
+                            {
+                                StashName = StringRemoveHeadAndEnd(StashDataList[0].Replace("onglet de réserve ", "").Trim()).Trim();
+                                Position_Left = StashDataList[1].Replace("e en partant de la gauche", "").Trim();
+                                Position_Top = StashDataList[2].Replace("e en partant du haut", "").Trim().Replace(")", "");
+                            }
+                            else
+                            {
+                                StashName = StringRemoveHeadAndEnd(StashDataList[0].Replace("Truhenfach ", "").Trim()).Trim();
+                                Position_Left = StashDataList[2].Replace(" von links", "").Trim();
+                                Position_Top = StashDataList[3].Replace(" von oben", "").Trim().Replace(")", "");
+                            }
+                            break;
+                        case "Português Brasileiro|Español":
+                            if (StashDataList[0].Contains("aba do baú"))
+                            {
+                                StashName = StringRemoveHeadAndEnd(StashDataList[1]).Trim();
+                                Position_Left = StashDataList[3].Replace("esquerda", "").Trim();
+                                Position_Top = StashDataList[4].Replace("topo", "").Trim().Replace(")", "");
+                            }
+                            else
+                            {
+                                StashName = StringRemoveHeadAndEnd(StashDataList[0].Replace("pestaña de alijo ", "").Trim()).Trim();
+                                Position_Left = StashDataList[2].Replace("izquierda", "").Trim();
+                                Position_Top = StashDataList[3].Replace("arriba", "").Trim().Replace(")", "");
+                            }
+                            break;
+                        case "Русский":
+                            StashName = StringRemoveHeadAndEnd(StashDataList[0].Replace("секция ", "").Trim()).Trim();
+                            Position_Left = StashDataList[2].Replace("столбец", "").Trim();
+                            Position_Top = StashDataList[3].Replace("ряд", "").Trim().Replace(")", "");
+                            break;
+                        case "ไทย":
+                            StashName = StringRemoveHeadAndEnd(StashDataList[0].Replace("stash tab ", "").Trim()).Trim();
+                            Position_Left = StashDataList[2].Replace("ซ้าย", "").Trim();
+                            Position_Top = StashDataList[3].Replace("บน", "").Trim().Replace(")", "");
+                            break;
+                        case "한국어":
+                            StashName = StringRemoveHeadAndEnd(StashDataList[0].Replace("보관함 탭 ", "").Trim()).Trim();
+                            Position_Left = StashDataList[2].Replace("왼쪽", "").Trim();
+                            Position_Top = StashDataList[3].Replace("상단", "").Trim().Replace(")", "");
+                            break;
+                    }
+
+
+                }
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+
+
+            //Info.Split()
+            return "";
         }
+
+        private string StringRemoveHeadAndEnd(string Value)
+        {
+            string Result = "";
+            Result = Value.Substring(2);
+            Result = Result.Substring(0, Result.Length - 1);
+            return Result;
+        }
+
+        private string StringRemoveHeadAndEnd(string Value, int StartPosition)
+        {
+            string Result = "";
+            Result = Value.Substring(StartPosition);
+            Result = Result.Substring(0, Result.Length - 1);
+            return Result;
+        }
+    }
+
+    public class BuyerInfo
+    {
+        public string Buyer { get; set; }
+        public string League { get; set; }
+        public string ItemName { get; set; }
+        public List<string> Price { get; set; }
+        public string StashName { get; set; }
+        public Point Location { get; set; }
     }
 
 }

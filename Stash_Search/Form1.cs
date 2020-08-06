@@ -78,7 +78,7 @@ namespace Stash_Search
         {
             listBox1.Items.Add(LogDetect.ReadLastLine(FilePath, 3, Encoding.UTF8));
             Console.WriteLine(LogDetect.ReadLastLine(FilePath, 1, Encoding.UTF8));
-            var asd = LogDetect.ggg(LogDetect.ReadLastLine(FilePath, 1, Encoding.UTF8));
+            var asd = LogDetect.LogFormat(LogDetect.ReadLastLine(FilePath, 1, Encoding.UTF8));
         }
         #endregion
 
