@@ -109,7 +109,7 @@ namespace Stash_Search.API
             }
         }
 
-        public string LogFormat(string LogStr)
+        public BuyerInfo LogFormat(string LogStr)
         {
             try
             {
@@ -148,7 +148,7 @@ namespace Stash_Search.API
                             break;
                         default:
                             Language = "Unknown";
-                            return "";
+                            return null;
                     }
 
                     Regex MsgRegex = new Regex(@"\(.+[0-9]\)|\(.+\)");
@@ -229,17 +229,40 @@ namespace Stash_Search.API
                             break;
                     }
 
+                    string InfoContent = MessageList[1];
+                    int ItemStrFrom = InfoContent.IndexOf("I would like to buy your") + "I would like to buy your".Length;
+                    int ItemStrTo = InfoContent.LastIndexOf("listed for");
+                    string ItemName = InfoContent.Substring(ItemStrFrom, ItemStrTo - ItemStrFrom).Trim();
 
+                    int PriceStrFrom = InfoContent.IndexOf("listed for") + "listed for".Length;
+                    int PriceStrTo = InfoContent.LastIndexOf("in");
+                    string Price = InfoContent.Substring(PriceStrFrom, PriceStrTo - PriceStrFrom).Trim();
+
+                    int LeagueStrFrom = InfoContent.IndexOf("in") + "in".Length;
+                    int LeagueStrTo = InfoContent.LastIndexOf("(stash");
+                    string League = InfoContent.Substring(LeagueStrFrom, LeagueStrTo - LeagueStrFrom).Trim();
+
+
+
+                    BuyerInfo buyerInfo = new BuyerInfo();
+                    buyerInfo.Buyer = BuyerName;
+                    buyerInfo.League = League;
+                    buyerInfo.ItemName = ItemName;
+                    buyerInfo.Price = Price;
+                    buyerInfo.StashName = StashName;
+                    buyerInfo.Location = new Point(int.Parse(Position_Left), int.Parse(Position_Top));
+
+                    return buyerInfo;
                 }
             }
             catch (Exception)
             {
-                return "";
+                return null;
             }
 
 
             //Info.Split()
-            return "";
+            return null;
         }
 
         private string StringRemoveHeadAndEnd(string Value)
@@ -264,7 +287,7 @@ namespace Stash_Search.API
         public string Buyer { get; set; }
         public string League { get; set; }
         public string ItemName { get; set; }
-        public List<string> Price { get; set; }
+        public string Price { get; set; }
         public string StashName { get; set; }
         public Point Location { get; set; }
     }

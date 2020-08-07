@@ -39,7 +39,7 @@ namespace Stash_Search
         #region BackGroundWorker 設定
         private BackgroundWorker worker;
         //初始化
-        private void BackGroundWorkerInit(string InitHash ,string FilePath)
+        private void BackGroundWorkerInit(string InitHash, string FilePath)
         {
             worker = new BackgroundWorker();
             worker.WorkerReportsProgress = true;
@@ -57,7 +57,7 @@ namespace Stash_Search
         }
 
         //背景執行
-        private void BackGroundWorker_DoWork<T>(string OriginHash,string FilePath)
+        private void BackGroundWorker_DoWork<T>(string OriginHash, string FilePath)
         {
             while (true)
             {
@@ -76,9 +76,13 @@ namespace Stash_Search
         //處理進度條更新
         private void BackGroundWorker_ProgressChanged<T>(string FilePath)
         {
-            listBox1.Items.Add(LogDetect.ReadLastLine(FilePath, 3, Encoding.UTF8));
-            Console.WriteLine(LogDetect.ReadLastLine(FilePath, 1, Encoding.UTF8));
             var asd = LogDetect.LogFormat(LogDetect.ReadLastLine(FilePath, 1, Encoding.UTF8));
+            
+            if(asd != null)
+            {
+                listBox1.Items.Add(LogDetect.ReadLastLine(FilePath, 1, Encoding.UTF8));
+                Console.WriteLine(LogDetect.ReadLastLine(FilePath, 1, Encoding.UTF8));
+            }
         }
         #endregion
 
