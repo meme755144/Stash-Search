@@ -111,9 +111,5 @@ namespace Stash_Search
 
         #endregion
 
-        private void Button_Cancel_Click(object sender, EventArgs e)
-        {
-            //this.Parent.Controls.Remove()
-        }
     }
 }

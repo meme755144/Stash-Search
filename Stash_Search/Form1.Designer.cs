@@ -55,17 +55,19 @@
             // 
             // button2
             // 
+            this.button2.BackColor = System.Drawing.Color.White;
             this.button2.Location = new System.Drawing.Point(646, 309);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 3;
             this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // infoListView1
             // 
-            this.infoListView1.Location = new System.Drawing.Point(32, 330);
+            this.infoListView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.infoListView1.Location = new System.Drawing.Point(28, 260);
             this.infoListView1.Name = "infoListView1";
             this.infoListView1.Size = new System.Drawing.Size(529, 262);
             this.infoListView1.TabIndex = 4;
@@ -74,13 +76,16 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(809, 636);
+            this.BackColor = System.Drawing.Color.Green;
+            this.ClientSize = new System.Drawing.Size(898, 811);
             this.Controls.Add(this.infoListView1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.TopMost = true;
+            this.TransparencyKey = System.Drawing.Color.Green;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
 

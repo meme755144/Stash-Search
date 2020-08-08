@@ -164,7 +164,6 @@
             this.Button_Cancel.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Button_Cancel.TabIndex = 13;
             this.Button_Cancel.TabStop = false;
-            this.Button_Cancel.Click += new System.EventHandler(this.Button_Cancel_Click);
             // 
             // Button_PanelControl
             // 
@@ -269,15 +268,15 @@
         private System.Windows.Forms.Label Label_StasNameContent;
         private System.Windows.Forms.Label Label_StashName;
         private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.PictureBox Button_PanelControl;
         private System.Windows.Forms.PictureBox Img_ItemIcon;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox Button_Invite;
         private System.Windows.Forms.PictureBox Button_Kick;
-        private System.Windows.Forms.PictureBox Button_Cancel;
         private System.Windows.Forms.Button Button_Sec;
         private System.Windows.Forms.Button Button_1min;
         private System.Windows.Forms.Button Button_Sold;
         private System.Windows.Forms.Panel ItemPanel;
+        public System.Windows.Forms.PictureBox Button_Cancel;
+        public System.Windows.Forms.PictureBox Button_PanelControl;
     }
 }

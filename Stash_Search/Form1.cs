@@ -92,8 +92,22 @@ namespace Stash_Search
 
         private void Button2_Click(object sender, EventArgs e)
         {
-            ListItem listItem = new ListItem();
-            infoListView1.AddListItem(listItem);
+            ListItem[] listItems = new ListItem[3];
+
+            for (int i = 0; i < listItems.Length; i++)
+            {
+                listItems[i] = new ListItem();
+                listItems[i].ItemName = i.ToString();
+
+                if(infoListView1.ItemCount <0)
+                {
+                    infoListView1.ViewClear();
+                }
+                else
+                {
+                    infoListView1.AddListItem(listItems[i]);
+                }
+            }
         }
     }
 }
