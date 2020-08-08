@@ -62,6 +62,12 @@
     <Compile Include="GridSetting.Designer.cs">
       <DependentUpon>GridSetting.cs</DependentUpon>
     </Compile>
+    <Compile Include="InfoListView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="InfoListView.Designer.cs">
+      <DependentUpon>InfoListView.cs</DependentUpon>
+    </Compile>
     <Compile Include="ListItem.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -84,6 +90,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GridSetting.zh-TW.resx">
       <DependentUpon>GridSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InfoListView.resx">
+      <DependentUpon>InfoListView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ListItem.resx">
       <DependentUpon>ListItem.cs</DependentUpon>
@@ -122,6 +131,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Grid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DownArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Invite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\kick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\UpArrow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

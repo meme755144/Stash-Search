@@ -84,11 +84,16 @@ namespace Stash_Search
                 Console.WriteLine(LogDetect.ReadLastLine(FilePath, 1, Encoding.UTF8));
             }
         }
+
+
+
+
         #endregion
 
-
-
-
-
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            ListItem listItem = new ListItem();
+            infoListView1.AddListItem(listItem);
+        }
     }
 }
